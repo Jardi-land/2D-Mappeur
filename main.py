@@ -1,5 +1,6 @@
 import sys, pygame
 from settings import *
+from interface import *
 
 pygame.init()
 
@@ -8,13 +9,16 @@ def main():
     pygame.display.set_caption(window_name)
     clock = pygame.time.Clock()
 
+    interface = Interface()
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-        # Draw event here        
+        # Draw event here
+        interface.draw()
 
         pygame.display.update()
         clock.tick(60)
