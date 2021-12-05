@@ -9,7 +9,7 @@ def main():
     pygame.display.set_caption(window_name)
     clock = pygame.time.Clock()
 
-    interface = Interface()
+    interface = Interface(screen)
 
     while True:
         for event in pygame.event.get():
