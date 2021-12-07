@@ -10,6 +10,12 @@ class Interface:
         self.display_surface = surface
 
         #################
+        #"NOTHING-COLOR"#
+        #################
+        self.nothing_color = pygame.Surface((screen_res[0], screen_res[1]))
+        self.nothing_color.fill(((101, 85, 97, 255)))
+
+        #################
         #ZONE DE TRAVAIL#
         #################
         #wk = work zone
@@ -31,9 +37,19 @@ class Interface:
         self.wk_line = {"vertical": pygame.image.load("mappeur_files/internal/work_zone/line/vertical.png").convert_alpha(),
                         "horizontal": pygame.image.load("mappeur_files/internal/work_zone/line/horizontal.png").convert_alpha()}
 
-    def draw(self):
+    def wk(self):
         self.display_surface.blit(self.wk_ts_bg, (screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1] - self.wk_zone_res[1] - 4))
 
+    def interface(self):
+
+        #################
+        #"NOTHING-COLOR"#
+        #################
+        self.display_surface.blit(self.nothing_color, (0, 0))
+        
+        ######
+        #LINE#
+        ######
         for i in self.wk_corner.keys():
             self.display_surface.blit(self.wk_corner[i]["image"], self.wk_corner[i]["pos"])
 
@@ -44,4 +60,12 @@ class Interface:
         for i in range((screen_res[0] - 7) - (screen_res[0] - self.wk_zone_res[0] + 1)):
             self.display_surface.blit(self.wk_line["horizontal"], (screen_res[0] - self.wk_zone_res[0] + i, screen_res[1] - self.wk_zone_res[1] - 8))
             self.display_surface.blit(self.wk_line["horizontal"], (screen_res[0] - self.wk_zone_res[0] + i, screen_res[1] - 6))
+
+
+        #
+
+    def draw(self):
+        self.wk()
+
+        self.interface()
 
