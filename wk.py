@@ -32,7 +32,6 @@ class work_zone:
 
     def update(self):
         self.mouse = pygame.mouse.get_pos()
-        #pygame.mouse.set_pos(0, 0)
 
         if self.mouse_click(self.mouse):
             if not self.first_click_info["stop"]:
@@ -41,7 +40,6 @@ class work_zone:
                 self.first_click_info["stop"] = True
             else:
                 self.pos = (self.pos[0] + (self.mouse[0] - self.first_click_info["pos"][0]), self.pos[1] + (self.mouse[1] - self.first_click_info["pos"][1]))
-                print("x :", self.mouse[0] - self.first_click_info["pos"][0], "| y :", self.mouse[1] - self.first_click_info["pos"][1])
                 self.first_click_info["pos"] = (self.first_click_info["pos"][0] + (self.mouse[0] - self.first_click_info["pos"][0]), self.first_click_info["pos"][1] + (self.mouse[1] - self.first_click_info["pos"][1]))
 
         else:
