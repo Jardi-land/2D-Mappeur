@@ -38,6 +38,8 @@ class outline_interface:
         ############
         self.out_worker_class = out_worker(self.display_surface)
 
+        self.current_tool = "hand_tool"
+
     def line(self):
         for i in self.wk_corner.keys():
             self.display_surface.blit(self.wk_corner[i]["image"], self.wk_corner[i]["pos"])
@@ -57,4 +59,8 @@ class outline_interface:
     def update(self):
         self.nothing_color()
         self.line()
-        self.out_worker_class.update()
+
+        #out_worker_class (Tool change check)
+        self.tool_check = self.out_worker_class.update()
+        if not self.tool_check == None:
+            self.current_tool = self.tool_check
