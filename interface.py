@@ -25,6 +25,9 @@ class Interface:
         self.end_color = pygame.Surface((screen_res[0], screen_res[1]))
         self.end_color.fill(((101, 85, 97, 255)))
 
+    def send_tool(self):
+        self.wk_class.tool_info_sharing(self.outline_interface_class.tool_info_sharing())
+
     def layout_2(self):
 
         self.display_surface.blit(self.end_color, (0, 0))
@@ -36,6 +39,8 @@ class Interface:
         self.outline_interface_class.update()
 
     def draw(self):
+
+        self.send_tool()
 
         self.layout_2()
 

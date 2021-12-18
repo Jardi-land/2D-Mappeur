@@ -63,17 +63,16 @@ class out_worker:
         self.hand_tool = button(self.display_surface, "hand_tool", "mappeur_files/internal/out_worker/button/hand_tool/unselected.png", "mappeur_files/internal/out_worker/button/hand_tool/selected.png", self.first_button_pos[0], self.first_button_pos[1], self.button_size[0], self.button_size[1])
         self.zoom_tool = button(self.display_surface, "zoom_tool", "mappeur_files/internal/out_worker/button/zoom_tool/unselected.png", "mappeur_files/internal/out_worker/button/zoom_tool/selected.png", self.first_button_pos[0] - (self.button_size[0] - 2), self.first_button_pos[1], self.button_size[0], self.button_size[1])
 
+    def send_tool(self):
+        return self.current_tool
+
     def update(self):
         self.mouse = pygame.mouse.get_pos()
 
         if not self.hand_tool.get_tool(self.mouse, self.current_tool) == None:
             self.current_tool = self.hand_tool.get_tool(self.mouse, self.current_tool)
-            return self.current_tool
         self.hand_tool.update(self.mouse, self.current_tool)
 
         if not self.zoom_tool.get_tool(self.mouse, self.current_tool) == None:
             self.current_tool = self.zoom_tool.get_tool(self.mouse, self.current_tool)
-            return self.current_tool
         self.zoom_tool.update(self.mouse, self.current_tool)
-
-        return None

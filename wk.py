@@ -18,6 +18,8 @@ class work_zone:
                                  "pos": (0, 0),
                                  "wk_ts_bg_pos": (0, 0)}
 
+        self.current_tool = "hand_tool"
+
     def mouse_click(self, mouse):
         if mouse[0] > screen_res[0] - self.wk_ts_bg.get_width() and mouse[1] > screen_res[1] - self.wk_ts_bg.get_height():
             if pygame.mouse.get_pressed()[0]:
@@ -26,6 +28,9 @@ class work_zone:
                 return False
         else:
             return False
+
+    def tool_info_sharing(self, tool):
+        self.current_tool = tool
     
     def draw(self, pos):
         self.display_surface.blit(self.wk_ts_bg, pos)

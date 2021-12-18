@@ -56,11 +56,11 @@ class outline_interface:
         self.display_surface.blit(self.nothing_color_up, (0, 0))
         self.display_surface.blit(self.nothing_color_down, (0, 0))
 
+    def tool_info_sharing(self):
+        self.current_tool = self.out_worker_class.send_tool()
+        return self.current_tool
+
     def update(self):
         self.nothing_color()
         self.line()
-
-        #out_worker_class (Tool change check)
-        self.tool_check = self.out_worker_class.update()
-        if not self.tool_check == None:
-            self.current_tool = self.tool_check
+        self.out_worker_class.update()
