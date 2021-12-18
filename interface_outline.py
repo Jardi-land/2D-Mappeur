@@ -1,5 +1,6 @@
 import sys, pygame
 from settings import *
+from out_worker import out_worker
 
 class outline_interface:
     def __init__(self, surface) -> None:
@@ -32,6 +33,11 @@ class outline_interface:
         self.nothing_color_up.fill(((125, 146, 158, 255)))
         self.nothing_color_down.fill(((125, 146, 158, 255)))
 
+        ############
+        #OUT_WORKER#
+        ############
+        self.out_worker_class = out_worker(self.display_surface)
+
     def line(self):
         for i in self.wk_corner.keys():
             self.display_surface.blit(self.wk_corner[i]["image"], self.wk_corner[i]["pos"])
@@ -51,3 +57,4 @@ class outline_interface:
     def update(self):
         self.nothing_color()
         self.line()
+        self.out_worker_class.update()
