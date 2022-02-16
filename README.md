@@ -78,6 +78,12 @@ _Workflow:_
 		- Permet de récupérer le tool et le définir dans la class
 	- 🟣draw:
 		- Permet d’afficher la work zone TS
+	- 🟣hand_tool:
+		- Action de drag la work_zone
+	- 🟣zoom_tool:
+		- Rien pour le moment
+	- 🟣current_action:
+		- Choisir l’action en fonction du tool
 	- 🟣update:
-		- Permet d’exécuter le tool « hand tool » et la fonction draw
+		- Permet d’exécuter current_action et draw
 
