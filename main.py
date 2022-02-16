@@ -22,6 +22,5 @@ def main():
 
         pygame.display.update()
         clock.tick(60)
-        print(f"FPS: {int(clock.get_fps())}")
 
 main()
