@@ -35,20 +35,32 @@ class work_zone:
     def draw(self, pos):
         self.display_surface.blit(self.wk_ts_bg, pos)
 
-    def update(self):
-        self.mouse = pygame.mouse.get_pos()
-
-        if self.mouse_click(self.mouse):
+    def hand_tool(self, mouse):
+        if self.mouse_click(mouse):
             if not self.first_click_info["stop"]:
-                self.first_click_info["pos"] = (self.mouse[0], self.mouse[1])
+                self.first_click_info["pos"] = (mouse[0], mouse[1])
                 self.first_click_info["wk_ts_bg_pos"] = (self.pos[0], self.pos[1])
                 self.first_click_info["stop"] = True
             else:
-                self.pos = (self.pos[0] + (self.mouse[0] - self.first_click_info["pos"][0]), self.pos[1] + (self.mouse[1] - self.first_click_info["pos"][1]))
-                self.first_click_info["pos"] = (self.first_click_info["pos"][0] + (self.mouse[0] - self.first_click_info["pos"][0]), self.first_click_info["pos"][1] + (self.mouse[1] - self.first_click_info["pos"][1]))
+                self.pos = (self.pos[0] + (mouse[0] - self.first_click_info["pos"][0]), self.pos[1] + (mouse[1] - self.first_click_info["pos"][1]))
+                self.first_click_info["pos"] = (self.first_click_info["pos"][0] + (mouse[0] - self.first_click_info["pos"][0]), self.first_click_info["pos"][1] + (mouse[1] - self.first_click_info["pos"][1]))
 
         else:
             self.first_click_info["stop"] = False
+
+    def zoom_tool(self, mouse):
+        pass
+
+    def current_action(self, mouse):
+        if self.current_tool == "hand_tool":
+            self.hand_tool(mouse)
+        elif self.current_tool == "zoom_tool":
+            self.zoom_tool(mouse)
+
+    def update(self):
+        self.mouse = pygame.mouse.get_pos()
+
+        self.current_action(self.mouse)
 
         self.draw(self.pos)
 
