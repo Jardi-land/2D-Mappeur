@@ -73,7 +73,7 @@ _Workflow:_
 📋wk:
 - 🟨work_zone:
 	- 🟣mouse_click:
-		- Permet de détecter les cliques dans la work zone
+		- Permet de détecter les cliques dans la work zone, Type de cliques: « left, right, any »
 	- 🟣tool_info_sharing:
 		- Permet de récupérer le tool et le définir dans la class
 	- 🟣draw:
