@@ -32,13 +32,33 @@ class work_zone:
 
         self.current_tool = "hand_tool"
 
-    def mouse_click(self, mouse, click_type):
-        if mouse[0] > screen_res[0] - self.wk_ts_bg.get_width() and mouse[1] > screen_res[1] - self.wk_ts_bg.get_height():
-            if click_type == "left" and pygame.mouse.get_pressed()[0]:
-                return True
-            elif click_type == "right" and pygame.mouse.get_pressed()[2]:
-                return True
+    def mouse_click(self, mouse, click_type, use_single):
+        if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
+            if click_type == "left":
+                if pygame.mouse.get_pressed()[0]:
+                    if use_single:
+                        if self.single_input["left_click"]:
+                            self.single_input["left_click"] = False
+                            return True
+                        else: return False
+                    else: return True
+                else:
+                    self.single_input["left_click"] = True
+                    return False
+            elif click_type == "right":
+                if pygame.mouse.get_pressed()[2]:
+                    if use_single:
+                        if self.single_input["right_click"]:
+                            self.single_input["right_click"] = False
+                            return True
+                        else: return False
+                    else: return True
+                else:
+                    self.single_input["right_click"] = True
+                    return False
             elif click_type == "any" and (pygame.mouse.get_pressed()[0] or pygame.mouse.get_pressed()[2]):
+                if use_single:
+                    print("ERROR: pas de use_single pour le click type: any")
                 return True
             else:
                 return False
@@ -52,7 +72,7 @@ class work_zone:
         self.display_surface.blit(self.wk_ts_bg, pos)
 
     def hand_tool(self, mouse):
-        if self.mouse_click(mouse, "any"):
+        if self.mouse_click(mouse, "any", False):
             if not self.first_click_info["stop"]:
                 self.first_click_info["pos"] = (mouse[0], mouse[1])
                 self.first_click_info["wk_ts_bg_pos"] = (self.pos[0], self.pos[1])
