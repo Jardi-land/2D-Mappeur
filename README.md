@@ -81,7 +81,7 @@ _Workflow:_
 	- 🟣hand_tool:
 		- Action de drag la work_zone
 	- 🟣zoom_tool:
-		- Rien pour le moment
+		- Zoom en « in » ou « out » sur la work_zone
 	- 🟣current_action:
 		- Choisir l’action en fonction du tool
 	- 🟣update:

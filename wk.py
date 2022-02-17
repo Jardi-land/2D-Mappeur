@@ -14,6 +14,18 @@ class work_zone:
 
         self.pos = pygame.math.Vector2(screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1] - self.wk_zone_res[1] - 4)
 
+        self.size_og = (self.wk_ts_bg.get_width(), self.wk_ts_bg.get_height())
+
+        self.single_input = {"left_click": True, "right_click": True}
+
+        self.size = self.size_og
+
+        self.zoom_array = 0
+
+        self.zoom_array_max = 5
+
+        self.zoom_table = {5: 2, 4: 1.8, 3: 1.6, 2: 1.4, 1: 1.2, 0: 1, -1: 0.8, -2: 0.6, -3: 0.4, -4: 0.2, -5: 0.1}
+
         self.first_click_info = {"stop": False,
                                  "pos": (0, 0),
                                  "wk_ts_bg_pos": (0, 0)}
@@ -53,7 +65,36 @@ class work_zone:
             self.first_click_info["stop"] = False
 
     def zoom_tool(self, mouse):
-        pass
+        if self.mouse_click(mouse, "left", True):
+            self.zoom_type = "in"
+        elif self.mouse_click(mouse, "right", True):
+            self.zoom_type = "out"
+        else: 
+            self.zoom_type = None
+
+        if not self.zoom_type == None:
+            if self.zoom_type == "in":
+                if self.zoom_array == self.zoom_array_max:
+                    pass
+                else:
+                    self.zoom_array += 1
+                    self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(self.size_og[1] * self.zoom_table[self.zoom_array]))
+                    self.mouse_pos = (mouse[0], mouse[1])
+                    self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
+                    self.pos = (int(mouse[0] + (self.mouse_vector[0] * self.zoom_table[self.zoom_array])), int(mouse[1] + (self.mouse_vector[1] * self.zoom_table[self.zoom_array])))
+                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg, (self.size))
+            elif self.zoom_type == "out":
+                if self.zoom_array == self.zoom_array_max * -1:
+                    pass
+                else:
+                    self.zoom_array -= 1
+                    self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(self.size_og[1] * self.zoom_table[self.zoom_array]))
+                    self.mouse_pos = (mouse[0], mouse[1])
+                    self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
+                    self.pos = (int(mouse[0] + (self.mouse_vector[0] * self.zoom_table[self.zoom_array])), int(mouse[1] + (self.mouse_vector[1] * self.zoom_table[self.zoom_array])))
+                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg, (self.size))
+
+
 
     def current_action(self, mouse):
         if self.current_tool == "hand_tool":
