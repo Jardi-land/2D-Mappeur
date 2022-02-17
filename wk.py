@@ -10,7 +10,9 @@ class work_zone:
         #################
         self.wk_zone_res = screen_res_array[screen_res_numb + 1]
 
-        self.wk_ts_bg = pygame.transform.scale(pygame.image.load("mappeur_files/internal/work_zone/bg/transparent_background.png").convert_alpha(), (int(self.wk_zone_res[0]), int(self.wk_zone_res[1])))
+        self.wk_ts_bg_og = pygame.transform.scale(pygame.image.load("mappeur_files/internal/work_zone/bg/transparent_background.png").convert_alpha(), (int(self.wk_zone_res[0]), int(self.wk_zone_res[1])))
+
+        self.wk_ts_bg = self.wk_ts_bg_og
 
         self.pos = pygame.math.Vector2(screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1] - self.wk_zone_res[1] - 4)
 
@@ -102,7 +104,7 @@ class work_zone:
                     self.mouse_pos = (mouse[0], mouse[1])
                     self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
                     self.pos = (int(mouse[0] + (self.mouse_vector[0] * self.zoom_table[self.zoom_array])), int(mouse[1] + (self.mouse_vector[1] * self.zoom_table[self.zoom_array])))
-                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg, (self.size))
+                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
             elif self.zoom_type == "out":
                 if self.zoom_array == self.zoom_array_max * -1:
                     pass
@@ -112,7 +114,7 @@ class work_zone:
                     self.mouse_pos = (mouse[0], mouse[1])
                     self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
                     self.pos = (int(mouse[0] + (self.mouse_vector[0] * self.zoom_table[self.zoom_array])), int(mouse[1] + (self.mouse_vector[1] * self.zoom_table[self.zoom_array])))
-                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg, (self.size))
+                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
 
 
 
