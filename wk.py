@@ -32,7 +32,7 @@ class work_zone:
 
         self.current_tool = "hand_tool"
 
-    def mouse_click(self, mouse, click_type, use_single):
+    def mouse_click(self, mouse, click_type, use_single = False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
             if click_type == "left":
                 if pygame.mouse.get_pressed()[0]:
@@ -72,7 +72,7 @@ class work_zone:
         self.display_surface.blit(self.wk_ts_bg, pos)
 
     def hand_tool(self, mouse):
-        if self.mouse_click(mouse, "any", False):
+        if self.mouse_click(mouse, "any"):
             if not self.first_click_info["stop"]:
                 self.first_click_info["pos"] = (mouse[0], mouse[1])
                 self.first_click_info["wk_ts_bg_pos"] = (self.pos[0], self.pos[1])
