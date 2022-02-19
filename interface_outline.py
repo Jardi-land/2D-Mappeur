@@ -4,7 +4,6 @@ from out_worker import out_worker
 
 class outline_interface:
     def __init__(self, surface) -> None:
-        super().__init__()
         self.display_surface = surface
         #######
         #LIGNE#
