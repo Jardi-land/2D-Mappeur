@@ -1,22 +1,49 @@
+from math import fabs
 import sys, pygame
 from settings import *
 
+class wk_shard:
+    def __init__(self, surface, info_place, zoom_array):
+        self.display_surface = surface
+
+        self.info_place = (info_place[0] * -1, info_place[1] * -1) # (x, x)
+
+        self.zoom_array = zoom_array # Direct from zoom_table
+
+        self.wk_zone_res = screen_res_array[screen_res_numb + 1]
+
+        self.wk_ts_bg_og = pygame.transform.scale(pygame.image.load("mappeur_files/internal/work_zone/bg/transparent_background.png").convert_alpha(), (int(self.wk_zone_res[0]), int(self.wk_zone_res[1])))
+
+        self.size_og = (self.wk_ts_bg_og.get_width(), self.wk_ts_bg_og.get_height())
+        
+        self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (int(self.size_og[0] * self.zoom_array), int(self.size_og[1] * self.zoom_array)))
+
+        self.og_pos = (screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1] - self.wk_zone_res[1] - 4)
+
+        if self.info_place == (0, 0):
+            self.pos = self.og_pos
+        else: self.pos = (self.og_pos[0] + (self.wk_ts_bg.get_width() * self.info_place[0]), self.og_pos[1] + (self.wk_ts_bg.get_height() * self.info_place[1]))
+
+    def draw(self):
+        self.display_surface.blit(self.wk_ts_bg, self.pos)
+
+    def apply_mov(self, mov_vector):
+        self.pos = (self.pos[0] + mov_vector[0], self.pos[1] + mov_vector[1])
+
+
 class work_zone:
     def __init__(self, surface) -> None:
-        super().__init__()
         self.display_surface = surface
-        #################
-        #ZONE DE TRAVAIL#
-        #################
+
         self.wk_zone_res = screen_res_array[screen_res_numb + 1]
 
         self.wk_ts_bg_og = pygame.transform.scale(pygame.image.load("mappeur_files/internal/work_zone/bg/transparent_background.png").convert_alpha(), (int(self.wk_zone_res[0]), int(self.wk_zone_res[1])))
 
         self.wk_ts_bg = self.wk_ts_bg_og
 
-        self.pos = pygame.math.Vector2(screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1] - self.wk_zone_res[1] - 4)
+        self.pos = (screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1] - self.wk_zone_res[1] - 4)
 
-        self.size_og = (self.wk_ts_bg.get_width(), self.wk_ts_bg.get_height())
+        self.size_og = (self.wk_ts_bg_og.get_width(), self.wk_ts_bg_og.get_height())
 
         self.single_input = {"left_click": True, "right_click": True}
 
@@ -34,6 +61,11 @@ class work_zone:
 
         self.current_tool = "hand_tool"
 
+        self.wk_list = []
+
+        self.wk_list.append(wk_shard(self.display_surface, (0, 0), self.zoom_table[self.zoom_array]))
+
+        self.wk_list.append(wk_shard(self.display_surface, (1, 1), self.zoom_table[self.zoom_array]))
     def mouse_click(self, mouse, click_type, use_single = False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
             if click_type == "left":
@@ -70,8 +102,9 @@ class work_zone:
     def tool_info_sharing(self, tool):
         self.current_tool = tool
     
-    def draw(self, pos):
-        self.display_surface.blit(self.wk_ts_bg, pos)
+    def draw(self):
+        for i in self.wk_list:
+            i.draw()
 
     def hand_tool(self, mouse):
         if self.mouse_click(mouse, "any"):
@@ -80,6 +113,8 @@ class work_zone:
                 self.first_click_info["wk_ts_bg_pos"] = (self.pos[0], self.pos[1])
                 self.first_click_info["stop"] = True
             else:
+                for i in self.wk_list:
+                    i.apply_mov(((mouse[0] - self.first_click_info["pos"][0]), (mouse[1] - self.first_click_info["pos"][1])))
                 self.pos = (self.pos[0] + (mouse[0] - self.first_click_info["pos"][0]), self.pos[1] + (mouse[1] - self.first_click_info["pos"][1]))
                 self.first_click_info["pos"] = (self.first_click_info["pos"][0] + (mouse[0] - self.first_click_info["pos"][0]), self.first_click_info["pos"][1] + (mouse[1] - self.first_click_info["pos"][1]))
 
@@ -129,5 +164,5 @@ class work_zone:
 
         self.current_action(self.mouse)
 
-        self.draw(self.pos)
+        self.draw()
 
