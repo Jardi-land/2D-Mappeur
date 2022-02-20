@@ -24,9 +24,9 @@ class work_zone:
 
         self.zoom_array = 0
 
-        self.zoom_array_max = 5
+        self.zoom_array_max = 10
 
-        self.zoom_table = {5: 2, 4: 1.8, 3: 1.6, 2: 1.4, 1: 1.2, 0: 1, -1: 0.8, -2: 0.6, -3: 0.4, -4: 0.2, -5: 0.1}
+        self.zoom_table = {10: 2, 9: 1.9, 8: 1.8, 7: 1.7, 6: 1.6, 5: 1.5, 4: 1.4, 3: 1.3, 2: 1.2, 1: 1.1, 0: 1, -1: 0.9, -2: 0.8, -3: 0.7, -4: 0.6, -5: 0.5, -6: 0.4, -7: 0.3, -8: 0.2, -9: 0.1, -10: 0.09}
 
         self.first_click_info = {"stop": False,
                                  "pos": (0, 0),
