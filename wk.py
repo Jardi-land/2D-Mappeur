@@ -134,21 +134,25 @@ class work_zone:
                 if self.zoom_array == self.zoom_array_max:
                     pass
                 else:
+                    self.old_zoom_array = self.zoom_array
                     self.zoom_array += 1
                     self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(self.size_og[1] * self.zoom_table[self.zoom_array]))
-                    self.mouse_pos = (mouse[0], mouse[1])
                     self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
-                    self.pos = (int(mouse[0] + (self.mouse_vector[0] * self.zoom_table[self.zoom_array])), int(mouse[1] + (self.mouse_vector[1] * self.zoom_table[self.zoom_array])))
+                    self.pos = (int(mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))), int(mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))))
+                    for i in self.wk_list:
+                        i.apply_zoom(self.size, self.pos)
                     self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
             elif self.zoom_type == "out":
                 if self.zoom_array == self.zoom_array_max * -1:
                     pass
                 else:
+                    self.old_zoom_array = self.zoom_array
                     self.zoom_array -= 1
                     self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(self.size_og[1] * self.zoom_table[self.zoom_array]))
-                    self.mouse_pos = (mouse[0], mouse[1])
                     self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
-                    self.pos = (int(mouse[0] + (self.mouse_vector[0] * self.zoom_table[self.zoom_array])), int(mouse[1] + (self.mouse_vector[1] * self.zoom_table[self.zoom_array])))
+                    self.pos = (int(mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))), int(mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))))
+                    for i in self.wk_list:
+                        i.apply_zoom(self.size, self.pos)
                     self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
 
 
