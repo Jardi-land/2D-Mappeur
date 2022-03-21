@@ -1,7 +1,11 @@
 from math import fabs
 import sys, pygame
+from this import s
 from settings import *
 
+class adding_button:
+    def __init__(self, surface, info_place):
+        pass
 class wk_shard:
     def __init__(self, surface, info_place, zoom_array):
         self.display_surface = surface
@@ -30,6 +34,9 @@ class wk_shard:
     def apply_mov(self, mov_vector):
         self.pos = (self.pos[0] + mov_vector[0], self.pos[1] + mov_vector[1])
 
+    def apply_zoom(self, size, pos):
+        self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (size))
+        self.pos = (pos[0] + (self.wk_ts_bg.get_width() * self.info_place[0]), pos[1] + (self.wk_ts_bg.get_height() * self.info_place[1]))
 
 class work_zone:
     def __init__(self, surface) -> None:
@@ -65,7 +72,7 @@ class work_zone:
 
         self.wk_list.append(wk_shard(self.display_surface, (0, 0), self.zoom_table[self.zoom_array]))
 
-        self.wk_list.append(wk_shard(self.display_surface, (1, 1), self.zoom_table[self.zoom_array]))
+        self.wk_list.append(wk_shard(self.display_surface, (0, 1), self.zoom_table[self.zoom_array]))
     def mouse_click(self, mouse, click_type, use_single = False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
             if click_type == "left":
@@ -154,14 +161,17 @@ class work_zone:
                     for i in self.wk_list:
                         i.apply_zoom(self.size, self.pos)
                     self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
-
-
+        
+    def adding_tool(self, mouse):
+        pass
 
     def current_action(self, mouse):
         if self.current_tool == "hand_tool":
             self.hand_tool(mouse)
         elif self.current_tool == "zoom_tool":
             self.zoom_tool(mouse)
+        elif self.current_tool == "adding_tool":
+            self.adding_tool(mouse)
 
     def update(self):
         self.mouse = pygame.mouse.get_pos()
