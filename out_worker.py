@@ -62,7 +62,6 @@ class out_worker:
         #All button
         self.hand_tool = button(self.display_surface, "hand_tool", "mappeur_files/internal/out_worker/button/hand_tool/unselected.png", "mappeur_files/internal/out_worker/button/hand_tool/selected.png", self.first_button_pos[0], self.first_button_pos[1], self.button_size[0], self.button_size[1])
         self.zoom_tool = button(self.display_surface, "zoom_tool", "mappeur_files/internal/out_worker/button/zoom_tool/unselected.png", "mappeur_files/internal/out_worker/button/zoom_tool/selected.png", self.first_button_pos[0] - (self.button_size[0] - 2), self.first_button_pos[1], self.button_size[0], self.button_size[1])
-        self.adding_tool = button(self.display_surface, "adding_tool", "mappeur_files/internal/out_worker/button/adding_tool/unselected.png", "mappeur_files/internal/out_worker/button/adding_tool/selected.png", self.first_button_pos[0] - (2 * (self.button_size[0] - 2)), self.first_button_pos[1], self.button_size[0], self.button_size[1])
 
     def send_tool(self):
         return self.current_tool
@@ -77,7 +76,3 @@ class out_worker:
         if not self.zoom_tool.get_tool(self.mouse, self.current_tool) == None:
             self.current_tool = self.zoom_tool.get_tool(self.mouse, self.current_tool)
         self.zoom_tool.update(self.mouse, self.current_tool)
-
-        if not self.adding_tool.get_tool(self.mouse, self.current_tool) == None:
-            self.current_tool = self.adding_tool.get_tool(self.mouse, self.current_tool)
-        self.adding_tool.update(self.mouse, self.current_tool)
