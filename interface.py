@@ -1,7 +1,9 @@
-import sys, pygame
+import sys
+import pygame
 from settings import *
 from wk import work_zone
 from interface_outline import outline_interface
+
 
 class Interface:
     def __init__(self, surface) -> None:
@@ -14,9 +16,9 @@ class Interface:
         #################
         #ZONE DE TRAVAIL#
         #################
-        #wk = work zone
+        # wk = work zone
         #ts = transparent
-        #bg = back ground
+        # bg = back ground
         self.wk_zone_res = screen_res_array[screen_res_numb + 1]
 
         self.wk_class = work_zone(surface)
@@ -26,7 +28,8 @@ class Interface:
         self.end_color.fill(((101, 85, 97, 255)))
 
     def send_tool(self):
-        self.wk_class.tool_info_sharing(self.outline_interface_class.tool_info_sharing())
+        self.wk_class.tool_info_sharing(
+            self.outline_interface_class.tool_info_sharing())
 
     def layout_2(self):
 
@@ -45,4 +48,3 @@ class Interface:
         self.layout_2()
 
         self.layout_1()
-
