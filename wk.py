@@ -105,7 +105,11 @@ class work_zone:
 
     def tool_info_sharing(self, tool):
         self.current_tool = tool
-    
+
+    def trans_pos(self, pos_base):
+        return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))
+        # Return for a base scale 1920 x 1080
+
     def draw(self):
         for i in self.wk_list:
             i.draw()
