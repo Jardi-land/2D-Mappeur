@@ -3,7 +3,6 @@ import sys, pygame
 from tkinter.filedialog import SaveAs
 from this import s
 from settings import *
- # General information place
 class wk_shard:
     def __init__(self, surface, info_place, zoom_array):
         self.display_surface = surface
@@ -36,6 +35,31 @@ class wk_shard:
         self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (size))
         self.pos = (pos[0] + (self.wk_ts_bg.get_width() * self.info_place[0]), pos[1] + (self.wk_ts_bg.get_height() * self.info_place[1]))
 
+
+class spawn_point:
+    def __init__(self, surface, zoom_array):
+        self.display_surface = surface
+
+        self.wk_zone_res = screen_res_array[screen_res_numb + 1]
+
+        self.zoom_array = zoom_array
+
+        self.spawn_icon_og = pygame.image.load("mappeur_files/internal/work_zone/spawn/spawn_point.png").convert_alpha()
+
+        self.spawn_icon = pygame.transform.scale(self.spawn_icon_og, (int(self.spawn_icon_og.get_width() * self.zoom_array), int(self.spawn_icon_og.get_height() * self.zoom_array)))
+
+        self.pos_og = (960, 540) # On a 1920 x 1080 resolution
+        self.pos = (0, 0)
+
+    def pos_transform(self, pos_base):
+        return (self.spawn_icon.get_width() * (1920 / self.pos_base[0]) + (screen_res[0] - self.wk_zone_res[0] - 4), self.spawn_icon.get_width() * (1080 / self.pos_base[1]) + (screen_res[1] - self.wk_zone_res[1] - 4))
+
+    def apply_zoom(self, size):
+        self.spawn_icon = pygame.transform.scale(self.spawn_icon_og, (self.spawn_icon_og.get_width() * size, self.spawn_icon_og.get_height() * size))
+
+    def draw(self):
+        self.display_surface.blit(self.spawn_icon, (self.pos[0] - (self.spawn_icon.get_width() / 2), self.pos[1] - (self.spawn_icon.get_height() / 2)))
+
 class work_zone:
     def __init__(self, surface) -> None:
         self.display_surface = surface
@@ -64,11 +88,19 @@ class work_zone:
                                  "pos": (0, 0),
                                  "wk_ts_bg_pos": (0, 0)}
 
+        self.first_click_info_spawn = {"stop": False,
+                                       "pos": (0, 0),
+                                       "spawn_point_pos": (0, 0)}
+
         self.current_tool = "hand_tool"
 
         self.wk_list = []
 
         self.wk_list.append(wk_shard(self.display_surface, (0, 0), self.zoom_table[self.zoom_array]))
+
+        self.spawn_point = spawn_point(self.display_surface, self.zoom_table[self.zoom_array])
+
+        self.draw_spawn_point = False
 
     def mouse_click(self, mouse, click_type, use_single = False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
@@ -106,13 +138,20 @@ class work_zone:
     def tool_info_sharing(self, tool):
         self.current_tool = tool
 
-    def trans_pos(self, pos_base):
-        return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))
-        # Return for a base scale 1920 x 1080
+    def trans_pos(self, pos_base, reverse = False):
+        if not reverse:
+            return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))
+        else:
+            return (1920 / (self.wk_ts_bg.get_width() / (pos_base[0] - self.pos[0])), 1080 / (self.wk_ts_bg.get_height() / (pos_base[1] - self.pos[1])))
 
     def draw(self):
         for i in self.wk_list:
             i.draw()
+
+        if self.draw_spawn_point:
+            self.spawn_point.draw()
+        if not self.current_tool == "spawn_point":
+            self.draw_spawn_point = False
 
     def hand_tool(self, mouse):
         if self.mouse_click(mouse, "any"):
@@ -145,11 +184,11 @@ class work_zone:
                     self.old_zoom_array = self.zoom_array
                     self.zoom_array += 1
                     self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(self.size_og[1] * self.zoom_table[self.zoom_array]))
-                    self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
-                    self.pos = (int(mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))), int(mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))))
+                    self.pos = (mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])), mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])))
+                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
                     for i in self.wk_list:
                         i.apply_zoom(self.size, self.pos)
-                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
+                    self.spawn_point.apply_zoom(self.zoom_table[self.zoom_array])
             elif self.zoom_type == "out":
                 if self.zoom_array == self.zoom_array_max * -1:
                     pass
@@ -157,17 +196,26 @@ class work_zone:
                     self.old_zoom_array = self.zoom_array
                     self.zoom_array -= 1
                     self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(self.size_og[1] * self.zoom_table[self.zoom_array]))
-                    self.mouse_vector = ((screen_res[0] - self.wk_zone_res[0] - 4) - mouse[0], (screen_res[1] - self.wk_zone_res[1] - 4) - mouse[1])
-                    self.pos = (int(mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))), int(mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array]))))
+                    self.pos = (mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])), mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])))
+                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
                     for i in self.wk_list:
                         i.apply_zoom(self.size, self.pos)
-                    self.wk_ts_bg = pygame.transform.scale(self.wk_ts_bg_og, (self.size))
+                    self.spawn_point.apply_zoom(self.zoom_table[self.zoom_array])
+
+    def spawn_tool(self, mouse):
+        self.draw_spawn_point = True
+        self.spawn_point.pos = self.trans_pos(self.spawn_point.pos_og)
+        #if self.mouse_click(mouse, "any"):
+        #    pass
+        
 
     def current_action(self, mouse):
         if self.current_tool == "hand_tool":
             self.hand_tool(mouse)
         elif self.current_tool == "zoom_tool":
             self.zoom_tool(mouse)
+        elif self.current_tool == "spawn_tool":
+            self.spawn_tool(mouse)
 
     def update(self):
         self.mouse = pygame.mouse.get_pos()
@@ -175,4 +223,3 @@ class work_zone:
         self.current_action(self.mouse)
 
         self.draw()
-
