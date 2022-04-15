@@ -108,9 +108,6 @@ class work_zone:
         else:
             return False
 
-    def tool_info_sharing(self, tool):
-        self.current_tool = tool
-
     def trans_pos(self, pos_base, reverse=False):
         if not reverse:
             return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))

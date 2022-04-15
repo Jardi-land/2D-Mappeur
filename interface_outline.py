@@ -69,10 +69,10 @@ class outline_interface:
         self.display_surface.blit(self.nothing_color_down, (0, 0))
 
     def tool_info_sharing(self):
-        self.current_tool = self.out_worker_class.send_tool()
-        return self.current_tool
+        self.current_tool = self.out_worker_class.current_tool
 
     def update(self):
+        self.tool_info_sharing()
         self.nothing_color()
         self.line()
         self.out_worker_class.update()

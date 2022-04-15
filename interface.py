@@ -28,8 +28,7 @@ class Interface:
         self.end_color.fill(((101, 85, 97, 255)))
 
     def send_tool(self):
-        self.wk_class.tool_info_sharing(
-            self.outline_interface_class.tool_info_sharing())
+        self.wk_class.current_tool = self.outline_interface_class.current_tool
 
     def layout_2(self):
 

@@ -73,9 +73,6 @@ class out_worker:
         self.spawn_tool = button(self.display_surface, "spawn_tool", "mappeur_files/internal/out_worker/button/spawn_tool/unselected.png", "mappeur_files/internal/out_worker/button/spawn_tool/selected.png",
                                  self.first_button_pos[0] - (2 * (self.button_size[0] - 2)), self.first_button_pos[1], self.button_size[0], self.button_size[1], pygame.K_s)
 
-    def send_tool(self):
-        return self.current_tool
-
     def update(self):
         self.mouse = pygame.mouse.get_pos()
         self.keys = pygame.key.get_pressed()
