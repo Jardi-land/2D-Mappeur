@@ -40,6 +40,11 @@ class outline_interface:
         ############
         self.out_worker_class = out_worker(self.display_surface)
 
+        self.wk_line["vertical"] = pygame.transform.scale(self.wk_line["vertical"], (self.wk_line["vertical"].get_width(
+        ), (screen_res[1] - 9) - (screen_res[1] - self.wk_zone_res[1] - 7) - 6))
+        self.wk_line["horizontal"] = pygame.transform.scale(self.wk_line["horizontal"], (screen_res[0] - 7 - (
+            screen_res[0] - self.wk_zone_res[0] + 1), self.wk_line["horizontal"].get_height()))
+
         self.current_tool = "hand_tool"
 
     def line(self):
@@ -47,17 +52,17 @@ class outline_interface:
             self.display_surface.blit(
                 self.wk_corner[i]["image"], self.wk_corner[i]["pos"])
 
-        for i in range((screen_res[1] - 9) - (screen_res[1] - self.wk_zone_res[1] - 7) - 6):
-            self.display_surface.blit(self.wk_line["vertical"], (
-                screen_res[0] - self.wk_zone_res[0] - 8, screen_res[1] - self.wk_zone_res[1] + i))
-            self.display_surface.blit(
-                self.wk_line["vertical"], (screen_res[0] - 6, screen_res[1] - self.wk_zone_res[1] + i))
+        self.display_surface.blit(self.wk_line["vertical"], (
+            screen_res[0] - self.wk_zone_res[0] - 8, screen_res[1] - self.wk_zone_res[1]))
 
-        for i in range((screen_res[0] - 7) - (screen_res[0] - self.wk_zone_res[0] + 1)):
-            self.display_surface.blit(self.wk_line["horizontal"], (
-                screen_res[0] - self.wk_zone_res[0] + i, screen_res[1] - self.wk_zone_res[1] - 8))
-            self.display_surface.blit(
-                self.wk_line["horizontal"], (screen_res[0] - self.wk_zone_res[0] + i, screen_res[1] - 6))
+        self.display_surface.blit(
+            self.wk_line["vertical"], (screen_res[0] - 6, screen_res[1] - self.wk_zone_res[1]))
+
+        self.display_surface.blit(self.wk_line["horizontal"], (
+            screen_res[0] - self.wk_zone_res[0], screen_res[1] - self.wk_zone_res[1] - 8))
+
+        self.display_surface.blit(
+            self.wk_line["horizontal"], (screen_res[0] - self.wk_zone_res[0], screen_res[1] - 6))
 
     def nothing_color(self):
         self.display_surface.blit(self.nothing_color_up, (0, 0))
