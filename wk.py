@@ -149,35 +149,23 @@ class work_zone:
         else:
             self.zoom_type = None
 
+        def zooming_process(self, type):
+            if (type == "in" and self.zoom_array == self.zoom_array_max) or (type == "out" and self.zoom_array == self.zoom_array_max * -1):
+                pass
+            else:
+                self.old_zoom_array = self.zoom_array
+                self.zoom_array += 1 if type == "in" else -1
+                self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(
+                    self.size_og[1] * self.zoom_table[self.zoom_array]))
+                self.pos = (mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])),
+                            mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])))
+                self.wk_ts_bg = pygame.transform.scale(
+                    self.wk_ts_bg_og, (self.size))
+                self.spawn_point.apply_zoom(
+                    self.zoom_table[self.zoom_array])
+
         if not self.zoom_type == None:
-            if self.zoom_type == "in":
-                if self.zoom_array == self.zoom_array_max:
-                    pass
-                else:
-                    self.old_zoom_array = self.zoom_array
-                    self.zoom_array += 1
-                    self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(
-                        self.size_og[1] * self.zoom_table[self.zoom_array]))
-                    self.pos = (mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])),
-                                mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])))
-                    self.wk_ts_bg = pygame.transform.scale(
-                        self.wk_ts_bg_og, (self.size))
-                    self.spawn_point.apply_zoom(
-                        self.zoom_table[self.zoom_array])
-            elif self.zoom_type == "out":
-                if self.zoom_array == self.zoom_array_max * -1:
-                    pass
-                else:
-                    self.old_zoom_array = self.zoom_array
-                    self.zoom_array -= 1
-                    self.size = (int(self.size_og[0] * self.zoom_table[self.zoom_array]), int(
-                        self.size_og[1] * self.zoom_table[self.zoom_array]))
-                    self.pos = (mouse[0] + ((self.pos[0] - mouse[0]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])),
-                                mouse[1] + ((self.pos[1] - mouse[1]) * (self.zoom_table[self.zoom_array] / self.zoom_table[self.old_zoom_array])))
-                    self.wk_ts_bg = pygame.transform.scale(
-                        self.wk_ts_bg_og, (self.size))
-                    self.spawn_point.apply_zoom(
-                        self.zoom_table[self.zoom_array])
+            zooming_process(self, self.zoom_type)
 
     def spawn_tool(self, mouse):
         self.draw_spawn_point = True
