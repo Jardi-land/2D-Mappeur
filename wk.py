@@ -51,9 +51,6 @@ class spawn_point:
         self.pos_og = (960, 540) # On a 1920 x 1080 resolution
         self.pos = (0, 0)
 
-    def pos_transform(self, pos_base):
-        return (self.spawn_icon.get_width() * (1920 / self.pos_base[0]) + (screen_res[0] - self.wk_zone_res[0] - 4), self.spawn_icon.get_width() * (1080 / self.pos_base[1]) + (screen_res[1] - self.wk_zone_res[1] - 4))
-
     def apply_zoom(self, size):
         self.spawn_icon = pygame.transform.scale(self.spawn_icon_og, (self.spawn_icon_og.get_width() * size, self.spawn_icon_og.get_height() * size))
 
@@ -205,10 +202,17 @@ class work_zone:
     def spawn_tool(self, mouse):
         self.draw_spawn_point = True
         self.spawn_point.pos = self.trans_pos(self.spawn_point.pos_og)
-        #if self.mouse_click(mouse, "any"):
-        #    pass
-        
+        if self.mouse_click(mouse, "any"):
+            if not self.first_click_info_spawn["stop"]:
+                self.first_click_info_spawn["pos"] = (mouse[0], mouse[1])
+                self.first_click_info_spawn["spawn_point_pos"] = (self.spawn_point.pos_og[0], self.spawn_point.pos_og[1])
+                self.first_click_info_spawn["stop"] = True
+            else:
+                self.spawn_point.pos_og = (self.trans_pos(self.spawn_point.pos, True)[0] + (1920 / self.wk_ts_bg.get_width()) * (mouse[0] - self.first_click_info_spawn["pos"][0]), self.trans_pos(self.spawn_point.pos, True)[1] + (1080 / self.wk_ts_bg.get_height()) * (mouse[1] - self.first_click_info_spawn["pos"][1]))
+                self.first_click_info_spawn["pos"] = (self.first_click_info_spawn["pos"][0] + (mouse[0] - self.first_click_info_spawn["pos"][0]), self.first_click_info_spawn["pos"][1] + (mouse[1] - self.first_click_info_spawn["pos"][1]))
 
+        else:
+            self.first_click_info_spawn["stop"] = False
     def current_action(self, mouse):
         if self.current_tool == "hand_tool":
             self.hand_tool(mouse)
