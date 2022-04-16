@@ -29,11 +29,8 @@ class outline_interface:
         #################
         self.nothing_color_up = pygame.Surface(
             (screen_res[0], screen_res[1] - self.wk_zone_res[1] - 4))
-        self.nothing_color_down = pygame.Surface(
-            (screen_res[0] - self.wk_zone_res[0] - 4, screen_res[1]))
 
         self.nothing_color_up.fill(((125, 146, 158, 255)))
-        self.nothing_color_down.fill(((125, 146, 158, 255)))
 
         ############
         #OUT_WORKER#
@@ -67,8 +64,7 @@ class outline_interface:
             self.wk_line["horizontal"], (screen_res[0] - self.wk_zone_res[0], screen_res[1] - 6))
 
     def nothing_color(self):
-        self.display_surface.blit(self.nothing_color_up, (0, 0))
-        self.display_surface.blit(self.nothing_color_down, (0, 0))
+        self.display_surface.blit(self.nothing_color_up, (screen_res[0] - self.wk_zone_res[0] - 8, 0))
 
     def worker_info_sharing(self):
         self.current_tool = self.out_worker_class.current_tool
