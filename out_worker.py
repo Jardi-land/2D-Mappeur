@@ -49,11 +49,15 @@ class button:
         else:
             return None
 
-    def update(self, mouse, current_tool):
-        if self.is_over(mouse) or current_tool == self.action:
-            self.image = self.alternate_image
+    def update(self, mouse, current_tool, alpha=1):
+        if not alpha == 1:
+            self.image.set_alpha(255 * alpha)
         else:
-            self.image = self.default_image
+            self.image.set_alpha(255)
+            if self.is_over(mouse) or current_tool == self.action:
+                self.image = self.alternate_image
+            else:
+                self.image = self.default_image
         self.display_surface.blit(self.image, self.pos)
 
 
@@ -109,3 +113,5 @@ class out_worker:
                         self.mouse, self.current_tool)
                 if self.current_tool in i.appear_event:
                     i.update(self.mouse, self.current_tool)
+                else:
+                    i.update(self.mouse, self.current_tool, 0.5)
