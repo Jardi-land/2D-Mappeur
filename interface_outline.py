@@ -47,6 +47,8 @@ class outline_interface:
 
         self.current_tool = "hand_tool"
 
+        self.single_action = None
+
     def line(self):
         for i in self.wk_corner.keys():
             self.display_surface.blit(
@@ -68,11 +70,13 @@ class outline_interface:
         self.display_surface.blit(self.nothing_color_up, (0, 0))
         self.display_surface.blit(self.nothing_color_down, (0, 0))
 
-    def tool_info_sharing(self):
+    def worker_info_sharing(self):
         self.current_tool = self.out_worker_class.current_tool
+        self.single_action = self.out_worker_class.single_action
+        self.out_worker_class.single_action = None
 
     def update(self):
-        self.tool_info_sharing()
+        self.worker_info_sharing()
         self.nothing_color()
         self.line()
         self.out_worker_class.update()

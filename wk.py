@@ -66,6 +66,8 @@ class work_zone:
 
         self.current_tool = "hand_tool"
 
+        self.single_action = None
+
         self.spawn_point = spawn_point(
             self.display_surface, self.zoom_table[self.zoom_array])
 
@@ -138,6 +140,11 @@ class work_zone:
         else:
             self.first_click_info["stop"] = False
 
+        if self.single_action == "center":
+            self.pos = ((screen_res[0] - self.wk_zone_res[0] - 4) + (self.wk_zone_res[0] / 2) - (self.wk_ts_bg.get_width() / 2),
+                        (screen_res[1] - self.wk_zone_res[1] - 4) + (self.wk_zone_res[1] / 2) - (self.wk_ts_bg.get_height() / 2))
+
+
     def zoom_tool(self, mouse):
         if self.mouse_click(mouse, "left", True):
             self.zoom_type = "in"
@@ -164,9 +171,22 @@ class work_zone:
         if not self.zoom_type == None:
             zooming_process(self, self.zoom_type)
 
+        if self.single_action == "center":
+            self.zoom_array = 0
+            self.wk_ts_bg = pygame.transform.scale(
+                self.wk_ts_bg_og, (self.size_og))
+            self.spawn_point.apply_zoom(
+                self.zoom_table[self.zoom_array])
+            self.pos = (screen_res[0] - self.wk_zone_res[0] - 4,
+                        screen_res[1] - self.wk_zone_res[1] - 4)
+
     def spawn_tool(self, mouse):
         self.draw_spawn_point = True
         self.spawn_point.pos = self.trans_pos(self.spawn_point.pos_og)
+
+        if self.single_action == "center":
+            self.spawn_point.pos_og = (960, 540)
+
         if self.mouse_click(mouse, "any"):
             if not self.first_click_info_spawn["stop"]:
                 self.first_click_info_spawn["pos"] = (mouse[0], mouse[1])

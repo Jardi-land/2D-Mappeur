@@ -27,8 +27,9 @@ class Interface:
         self.end_color = pygame.Surface((screen_res[0], screen_res[1]))
         self.end_color.fill(((101, 85, 97, 255)))
 
-    def send_tool(self):
+    def send_info(self):
         self.wk_class.current_tool = self.outline_interface_class.current_tool
+        self.wk_class.single_action = self.outline_interface_class.single_action
 
     def layout_2(self):
 
@@ -42,7 +43,7 @@ class Interface:
 
     def draw(self):
 
-        self.send_tool()
+        self.send_info()
 
         self.layout_2()
 
