@@ -2,6 +2,7 @@ import sys
 import pygame
 from settings import *
 from out_worker import out_worker
+from e_list import e_list
 
 
 class outline_interface:
@@ -28,14 +29,25 @@ class outline_interface:
         #"NOTHING-COLOR"#
         #################
         self.nothing_color_up = pygame.Surface(
-            (screen_res[0], screen_res[1] - self.wk_zone_res[1] - 4))
+            (screen_res[0] - (screen_res[0] - self.wk_zone_res[0] - 8), screen_res[1] - self.wk_zone_res[1] - 4))
+        self.nothing_color_secondary = pygame.Surface((18, screen_res[1]))
+
+        self.e_list_line_vertical = pygame.Surface((3, screen_res[1]))
+        self.e_list_line_horizontal = pygame.Surface(
+            (screen_res[0] - self.wk_zone_res[0] - 30, 3))
 
         self.nothing_color_up.fill(((125, 146, 158, 255)))
+        self.nothing_color_secondary.fill(((125, 146, 158, 255)))
+
+        self.e_list_line_vertical.fill(((255, 255, 255, 255)))
+        self.e_list_line_horizontal.fill(((255, 255, 255, 255)))
 
         ############
         #OUT_WORKER#
         ############
         self.out_worker_class = out_worker(self.display_surface)
+
+        self.e_list = e_list(self.display_surface)
 
         self.wk_line["vertical"] = pygame.transform.scale(self.wk_line["vertical"], (self.wk_line["vertical"].get_width(
         ), (screen_res[1] - 9) - (screen_res[1] - self.wk_zone_res[1] - 7) - 6))
@@ -63,8 +75,20 @@ class outline_interface:
         self.display_surface.blit(
             self.wk_line["horizontal"], (screen_res[0] - self.wk_zone_res[0], screen_res[1] - 6))
 
+        self.display_surface.blit(
+            self.e_list_line_vertical, (screen_res[0] - self.wk_zone_res[0] - 27, 0))
+
+        self.display_surface.blit(self.e_list_line_vertical, (0, 0))
+
+        self.display_surface.blit(self.e_list_line_horizontal, (3, 0))
+
+        self.display_surface.blit(self.e_list_line_horizontal, (3, screen_res[1] - 3))
+
     def nothing_color(self):
-        self.display_surface.blit(self.nothing_color_up, (screen_res[0] - self.wk_zone_res[0] - 8, 0))
+        self.display_surface.blit(
+            self.nothing_color_up, (screen_res[0] - self.wk_zone_res[0] - 8, 0))
+        self.display_surface.blit(
+            self.nothing_color_secondary, (screen_res[0] - self.wk_zone_res[0] - 24, 0))
 
     def worker_info_sharing(self):
         self.current_tool = self.out_worker_class.current_tool
@@ -76,3 +100,4 @@ class outline_interface:
         self.nothing_color()
         self.line()
         self.out_worker_class.update()
+        self.e_list.draw()

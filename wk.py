@@ -160,7 +160,6 @@ class work_zone:
             self.pos = ((screen_res[0] - self.wk_zone_res[0] - 4) + (self.wk_zone_res[0] / 2) - (self.wk_ts_bg.get_width() / 2),
                         (screen_res[1] - self.wk_zone_res[1] - 4) + (self.wk_zone_res[1] / 2) - (self.wk_ts_bg.get_height() / 2))
 
-
     def zoom_tool(self, mouse):
         if self.mouse_click(mouse, "left", True):
             self.zoom_type = "in"
