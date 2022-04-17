@@ -112,9 +112,25 @@ class work_zone:
 
     def trans_pos(self, pos_base, reverse=False):
         if not reverse:
-            return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))
+            try:
+                return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))
+            except ZeroDivisionError:
+                if pos_base[0] == 0 and pos_base[1] == 0:
+                    return (self.pos[0], self.pos[1])
+                elif pos_base[0] == 0:
+                    return (self.pos[0], self.pos[1] + (self.wk_ts_bg.get_height() / (1080 / pos_base[1])))
+                elif pos_base[1] == 0:
+                    return (self.pos[0] + (self.wk_ts_bg.get_width() / (1920 / pos_base[0])), self.pos[1])
         else:
-            return (1920 / (self.wk_ts_bg.get_width() / (pos_base[0] - self.pos[0])), 1080 / (self.wk_ts_bg.get_height() / (pos_base[1] - self.pos[1])))
+            try:
+                return (1920 / (self.wk_ts_bg.get_width() / (pos_base[0] - self.pos[0])), 1080 / (self.wk_ts_bg.get_height() / (pos_base[1] - self.pos[1])))
+            except ZeroDivisionError:
+                if pos_base[0] == self.pos[0] and pos_base[1] == self.pos[1]:
+                    return (0, 0)
+                elif pos_base[0] == self.pos[0]:
+                    return (0, 1080 / (self.wk_ts_bg.get_height() / (pos_base[1] - self.pos[1])))
+                elif pos_base[1] == self.pos[1]:
+                    return (1920 / (self.wk_ts_bg.get_width() / (pos_base[0] - self.pos[0])), 0)
 
     def draw(self):
         self.display_surface.blit(self.wk_ts_bg, self.pos)
