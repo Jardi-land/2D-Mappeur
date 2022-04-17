@@ -132,13 +132,16 @@ class work_zone:
                 elif pos_base[1] == self.pos[1]:
                     return (1920 / (self.wk_ts_bg.get_width() / (pos_base[0] - self.pos[0])), 0)
 
-    def draw(self):
-        self.display_surface.blit(self.wk_ts_bg, self.pos)
+    def draw(self, wk_status):
+        if not wk_status:
+            pass
+        else:
+            self.display_surface.blit(self.wk_ts_bg, self.pos)
 
-        if self.draw_spawn_point:
-            self.spawn_point.draw()
-        if not self.current_tool == "spawn_point":
-            self.draw_spawn_point = False
+            if self.draw_spawn_point:
+                self.spawn_point.draw()
+            if not self.current_tool == "spawn_point":
+                self.draw_spawn_point = False
 
     def hand_tool(self, mouse):
         if self.mouse_click(mouse, "any"):
@@ -225,9 +228,9 @@ class work_zone:
         elif self.current_tool == "spawn_tool":
             self.spawn_tool(mouse)
 
-    def update(self):
+    def update(self, wk_status):
         self.mouse = pygame.mouse.get_pos()
 
         self.current_action(self.mouse)
 
-        self.draw()
+        self.draw(wk_status)

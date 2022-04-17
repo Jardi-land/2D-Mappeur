@@ -33,31 +33,38 @@ class button:
         else:
             return False
 
-    def get_action(self, mouse, current_tool):
+    def get_action(self, mouse, current_tool, button_status):
         self.keys = pygame.key.get_pressed()
-        if not current_tool == self.action:
-            if self.shortcut == None:
-                if pygame.mouse.get_pressed()[0] and self.is_over(mouse):
-                    return self.action
-                else:
-                    return None
-            else:
-                if (pygame.mouse.get_pressed()[0] and self.is_over(mouse)) or self.keys[self.shortcut]:
-                    return self.action
-                else:
-                    return None
-        else:
+        if not button_status:
             return None
-
-    def update(self, mouse, current_tool, alpha=1):
-        if not alpha == 1:
-            self.image.set_alpha(255 * alpha)
         else:
-            self.image.set_alpha(255)
-            if self.is_over(mouse) or current_tool == self.action:
-                self.image = self.alternate_image
+            if not current_tool == self.action:
+                if self.shortcut == None:
+                    if pygame.mouse.get_pressed()[0] and self.is_over(mouse):
+                        return self.action
+                    else:
+                        return None
+                else:
+                    if (pygame.mouse.get_pressed()[0] and self.is_over(mouse)) or self.keys[self.shortcut]:
+                        return self.action
+                    else:
+                        return None
             else:
-                self.image = self.default_image
+                return None
+
+    def update(self, mouse, current_tool, button_status, alpha=1):
+        if not button_status:
+            self.image = self.default_image
+            self.image.set_alpha(255 * 0.5)
+        else:
+            if not alpha == 1:
+                self.image.set_alpha(255 * alpha)
+            else:
+                self.image.set_alpha(255)
+                if self.is_over(mouse) or current_tool == self.action:
+                    self.image = self.alternate_image
+                else:
+                    self.image = self.default_image
         self.display_surface.blit(self.image, self.pos)
 
 
@@ -68,7 +75,7 @@ class out_worker:
 
         self.wk_zone_res = screen_res_array[screen_res_numb + 1]
 
-        self.current_tool = "hand_tool"
+        self.current_tool = None
 
         self.single_action = None
 
@@ -76,6 +83,8 @@ class out_worker:
 
         self.first_button_pos = (screen_res[0] - self.button_size[0] - 2, screen_res[1] -
                                  self.wk_zone_res[1] - 10 - self.button_size[1], self.button_size[0])
+
+        self.button_status = False
 
         self.button_list = []
 
@@ -102,16 +111,16 @@ class out_worker:
 
         for i in self.button_list:
             if i.type == "tool":
-                if not i.get_action(self.mouse, self.current_tool) == None:
+                if not i.get_action(self.mouse, self.current_tool, self.button_status) == None:
                     self.current_tool = i.get_action(
-                        self.mouse, self.current_tool)
-                i.update(self.mouse, self.current_tool)
+                        self.mouse, self.current_tool, self.button_status)
+                i.update(self.mouse, self.current_tool, self.button_status)
 
             elif i.type == "single_action":
-                if not i.get_action(self.mouse, self.current_tool) == None:
+                if not i.get_action(self.mouse, self.current_tool, self.button_status) == None:
                     self.single_action = i.get_action(
-                        self.mouse, self.current_tool)
+                        self.mouse, self.current_tool, self.button_status)
                 if self.current_tool in i.appear_event:
-                    i.update(self.mouse, self.current_tool)
+                    i.update(self.mouse, self.current_tool, self.button_status)
                 else:
-                    i.update(self.mouse, self.current_tool, 0.5)
+                    i.update(self.mouse, self.current_tool, self.button_status, 0.5)
