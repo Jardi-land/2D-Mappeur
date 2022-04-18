@@ -110,8 +110,12 @@ class text:
 
         new_line()
 
+        if self.text[-1] == "":
+            del self.text[-1]
+            del self.line_width[list(self.line_width.keys())[-1]]
+
     def get_height(self):
-        return len(self.line_width) * 7 * self.size
+        return len(self.line_width) * 8 * self.size
 
     def get_width(self):
         return max(self.line_width.values())
