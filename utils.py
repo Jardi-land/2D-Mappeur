@@ -35,7 +35,7 @@ class Spritesheet:
 
 
 class text:
-    def __init__(self, surface, str, size, pos, color, max_with=1920):
+    def __init__(self, surface, str, size, pos, color=(0, 0, 0), max_with=1920):
 
         self.display_surface = surface
 
