@@ -121,5 +121,5 @@ class text:
             self.pos_x = self.pos[0]
             for cara in line:
                 self.display_surface.blit(pygame.transform.scale(self.text_image[cara], (self.text_image[cara].get_width(
-                ) * self.size, self.text_image[cara].get_height() * self.size)), (self.pos_x, self.pos[1] + (7 * self.size * line_nb)))
+                ) * self.size, self.text_image[cara].get_height() * self.size)), (self.pos_x, self.pos[1] + (8 * self.size * line_nb)))
                 self.pos_x += self.text_image[cara].get_width() * self.size
