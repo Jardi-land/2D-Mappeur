@@ -35,7 +35,7 @@ class Spritesheet:
 
 
 class text:
-    def __init__(self, surface, str, size, pos, color=(0, 0, 0), max_with=1920):
+    def __init__(self, surface, string, size, pos, color=(0, 0, 0), max_with=1920):
 
         self.display_surface = surface
 
@@ -58,7 +58,7 @@ class text:
 
         self.possible_cara = self.data["frames"].keys()
 
-        self.text = str
+        self.text = string
 
         self.size = size
 
@@ -70,7 +70,7 @@ class text:
         for line in self.text:
             for cara in line:
                 if cara not in self.possible_cara:
-                    self.text = str.replace(cara, " None ")
+                    self.text = string.replace(cara, "þ")
 
         for line_nb, line in enumerate(self.text):
             self.line_width[line_nb] = 0
