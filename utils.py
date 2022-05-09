@@ -127,3 +127,117 @@ class text:
                 self.display_surface.blit(pygame.transform.scale(self.text_image[cara], (self.text_image[cara].get_width(
                 ) * self.size, self.text_image[cara].get_height() * self.size)), (self.pos_x, self.pos[1] + (8 * self.size * line_nb)))
                 self.pos_x += self.text_image[cara].get_width() * self.size
+
+
+class button:
+    def __init__(self, surface, x, y, width=40, height=20, string=" ", font_size=1, action=None, unactive=0):
+        self.display_surface = surface
+
+        self.action = action
+
+        self.unactive_time = unactive
+
+        self.active = True if unactive == 0 else False
+
+        self.button_img = {"top_left": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/top_left.png"),
+                           "top_right": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/top_right.png"),
+                           "bottom_left": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/bottom_left.png"),
+                           "bottom_right": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/bottom_right.png"),
+                           "bottom": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/bottom.png"),
+                           "top": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/top.png"),
+                           "left": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/left.png"),
+                           "right": pygame.image.load("mappeur_files/internal/out_worker/button/button_template/right.png"),
+
+                           "white": pygame.Surface((1, 1)),
+                           "grey": pygame.Surface((1, 1))}
+
+        self.button_img["white"].fill((255, 255, 255))
+        self.button_img["grey"].fill((198, 198, 198))
+
+        self.position = {"x": x - width / 2,
+                         "y": y - height / 2,
+                         "width": width,
+                         "height": height}
+
+        self.my_text = text(surface, string, font_size,
+                            (x, y), (0, 0, 0), width)
+
+        self.my_text = text(surface, string, font_size, (x - self.my_text.get_width() /
+                            2, y - self.my_text.get_height() / 2), (0, 0, 0), width)
+
+    def is_over(self):
+        self.mouse = pygame.mouse.get_pos()
+        if not self.active:
+            return False
+        else:
+            if self.mouse[0] > self.position["x"] and self.mouse[0] < self.position["x"] + self.position["width"] and self.mouse[1] > self.position["y"] and self.mouse[1] < self.position["y"] + self.position["height"]:
+                return True
+            else:
+                return False
+
+    def is_pressed(self):
+        if not self.active:
+            pass
+        else:
+            if self.is_over() and pygame.mouse.get_pressed()[0]:
+                return True
+
+    def constructor(self):
+        self.display_surface.blit(
+            self.button_img["top_left"], (self.position["x"], self.position["y"]))
+
+        self.display_surface.blit(
+            self.button_img["top_right"], (self.position["x"] + self.position["width"] - (self.button_img["top_right"].get_width() * 2), self.position["y"]))
+
+        self.display_surface.blit(
+            self.button_img["bottom_left"], (self.position["x"], self.position["y"] + self.position["height"] - (self.button_img["bottom_left"].get_height() * 2)))
+
+        self.display_surface.blit(
+            self.button_img["bottom_right"], (self.position["x"] + self.position["width"] - (self.button_img["bottom_right"].get_width() * 2), self.position["y"] + self.position["height"] - (self.button_img["bottom_right"].get_height() * 2)))
+
+        self.display_surface.blit(
+            pygame.transform.scale(self.button_img["bottom"], (self.position["width"] - (self.button_img["bottom_left"].get_width() * 3), self.button_img["bottom"].get_height())), (self.position["x"] + self.button_img["bottom_left"].get_width(), self.position["y"] + self.position["height"] - (self.button_img["bottom"].get_height() * 2)))
+
+        self.display_surface.blit(
+            pygame.transform.scale(self.button_img["top"], (self.position["width"] - (self.button_img["top_left"].get_width() * 3), self.button_img["top"].get_height())), (self.position["x"] + self.button_img["bottom_left"].get_width(), self.position["y"]))
+
+        self.display_surface.blit(
+            pygame.transform.scale(self.button_img["left"], (self.button_img["left"].get_width(), self.position["height"] - (self.button_img["top_left"].get_height() * 3))), (self.position["x"], self.position["y"] + self.button_img["top_left"].get_height()))
+
+        self.display_surface.blit(
+            pygame.transform.scale(self.button_img["right"], (self.button_img["right"].get_width(), self.position["height"] - (self.button_img["top_left"].get_height() * 3))), (self.position["x"] + self.position["width"] - (self.button_img["right"].get_width() * 2.5), self.position["y"] + self.button_img["top_right"].get_height()))
+
+        if self.is_over():
+            self.display_surface.blit(
+                pygame.transform.scale(self.button_img["white"], (self.position["width"] - (self.button_img["top_left"].get_width() * 3), self.position["height"] - (self.button_img["top_left"].get_height() * 3) + (self.button_img["top_left"].get_height() / 3))), (self.position["x"] + self.button_img["top_left"].get_width(), self.position["y"] + (self.button_img["top_left"].get_height() * 2/3)))
+
+            self.display_surface.blit(
+                pygame.transform.scale(self.button_img["white"], (self.button_img["top_left"].get_width() / 3, self.position["height"] - (self.button_img["top_left"].get_height() * 3))), (self.position["x"] + self.button_img["left"].get_width(), self.position["y"] + self.button_img["top_left"].get_height()))
+
+            self.display_surface.blit(
+                pygame.transform.scale(self.button_img["white"], (self.button_img["top_left"].get_width() / 3, self.position["height"] - (self.button_img["top_left"].get_height() * 3))), (self.position["x"] + self.position["width"] - (self.button_img["top_right"].get_width() * 2), self.position["y"] + self.button_img["top_left"].get_height()))
+
+        else:
+            self.display_surface.blit(
+                pygame.transform.scale(self.button_img["grey"], (self.position["width"] - (self.button_img["top_left"].get_width() * 3), self.position["height"] - (self.button_img["top_left"].get_height() * 3) + (self.button_img["top_left"].get_height() / 3))), (self.position["x"] + self.button_img["top_left"].get_width(), self.position["y"] + (self.button_img["top_left"].get_height() * 2/3)))
+
+            self.display_surface.blit(
+                pygame.transform.scale(self.button_img["grey"], (self.button_img["top_left"].get_width() / 3, self.position["height"] - (self.button_img["top_left"].get_height() * 3))), (self.position["x"] + self.button_img["left"].get_width(), self.position["y"] + self.button_img["top_left"].get_height()))
+
+            self.display_surface.blit(
+                pygame.transform.scale(self.button_img["grey"], (self.button_img["top_left"].get_width() / 3, self.position["height"] - (self.button_img["top_left"].get_height() * 3))), (self.position["x"] + self.position["width"] - (self.button_img["top_right"].get_width() * 2), self.position["y"] + self.button_img["top_left"].get_height()))
+
+    def update(self):
+        self.constructor()
+        self.my_text.draw()
+
+        if not self.active:
+            self.unactive_time -= 1
+            if self.unactive_time <= 0:
+                self.active = True
+        else:
+            if self.is_pressed() and self.action:
+                return self.action
+            else:
+                return None
+        return None

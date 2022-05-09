@@ -73,6 +73,8 @@ class work_zone:
 
         self.draw_spawn_point = False
 
+        self.wk_status = False
+
     def mouse_click(self, mouse, click_type, use_single=False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
             if click_type == "left":
@@ -132,8 +134,8 @@ class work_zone:
                 elif pos_base[1] == self.pos[1]:
                     return (1920 / (self.wk_ts_bg.get_width() / (pos_base[0] - self.pos[0])), 0)
 
-    def draw(self, wk_status):
-        if not wk_status:
+    def draw(self):
+        if not self.wk_status:
             pass
         else:
             self.display_surface.blit(self.wk_ts_bg, self.pos)
@@ -228,9 +230,9 @@ class work_zone:
         elif self.current_tool == "spawn_tool":
             self.spawn_tool(mouse)
 
-    def update(self, wk_status):
+    def update(self):
         self.mouse = pygame.mouse.get_pos()
 
         self.current_action(self.mouse)
 
-        self.draw(wk_status)
+        self.draw()
