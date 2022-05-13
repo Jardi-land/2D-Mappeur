@@ -50,7 +50,7 @@ class text:
         self.spritesheet = Spritesheet(
             "mappeur_files/internal/text/spritesheet.png", (0, 0, 0), color)
 
-        with open("mappeur_files/internal/text/spritesheet.json") as f:
+        with open("mappeur_files/internal/text/spritesheet.json", encoding="utf8") as f:
             self.data = json.load(f)
 
         for cara in list(self.data["frames"].keys()):
