@@ -3,6 +3,9 @@
 #Python
 __pycache__/
 
+#Map
+map_/
+
 #macOS
 .DS_Store
 .AppleDouble
