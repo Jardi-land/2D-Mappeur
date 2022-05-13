@@ -1,5 +1,5 @@
-import sys
 import pygame
+import os
 from settings import *
 from wk import work_zone
 from interface_outline import outline_interface
@@ -29,9 +29,9 @@ class Interface:
         self.end_color = pygame.Surface((screen_res[0], screen_res[1]))
         self.end_color.fill(((101, 85, 97, 255)))
 
-        self.wk_status = False
-
         self.menu_check = True
+
+        self.map_numb = 1
 
         self.action_list = []
 
@@ -40,9 +40,17 @@ class Interface:
         self.action_list.append(self.outline_interface_class.update)
         self.action_list.append(self.menu.update)
 
+    def fetch_name(self):
+        while True:
+            if os.path.exists(f"mappeur_files/map_/map_{self.map_numb}"):
+                self.map_numb += 1
+            else:
+                return self.map_numb
+
     def send_info(self):
         self.wk_class.current_tool = self.outline_interface_class.current_tool
         self.wk_class.single_action = self.outline_interface_class.single_action
+        self.outline_interface_class.out_worker_class.shortcut_status = self.wk_class.shortcut_status
 
     def action(self):
         if self.menu_check:
@@ -50,7 +58,11 @@ class Interface:
                 self.action_list.pop(self.action_list.index(self.menu.update))
                 del self.menu
                 self.wk_class.wk_status = True
+                self.wk_class.map_name = f"map_{self.fetch_name()}"
+                os.makedirs(f"mappeur_files/map_/map_{self.map_numb}")
+                self.wk_class.json_file()
                 self.outline_interface_class.out_worker_class.button_status = True
+                self.outline_interface_class.e_list.active = True
                 self.menu_check = False
 
         self.display_surface.blit(self.end_color, (0, 0))

@@ -1,5 +1,8 @@
+from git import Repo
+import os
 import pygame
 from settings import *
+import json
 
 
 class spawn_point:
@@ -74,6 +77,36 @@ class work_zone:
         self.draw_spawn_point = False
 
         self.wk_status = False
+
+        self.map_name = None
+
+        self.repo = Repo(os.path.dirname(__file__))
+
+        self.commits = list(self.repo.iter_commits("master"))
+
+        self.commits_find_p = str(len(self.commits) / 100).index(".")
+
+        self.version = "Alpha-0" if len(
+            self.commits) < 100 else f"Alpha-{str(len(self.commits) / 100)[0:self.commits_find_p]}"
+
+        for i in str(len(self.commits)):
+            self.version = f"{self.version}.{i}"
+
+        self.map_info = {"2D-mappeur": {"Mappeur-info": {"version": self.version,
+                                                         "Creator": "Lorenzo De Zen"},
+                                        "Map-info": {}}}
+
+        self.shortcut_status = True
+
+    def map_data(self):
+        self.map_info["2D-mappeur"]["Map-info"]["name"] = self.map_name
+        self.map_info["2D-mappeur"]["Map-info"]["base_scale"] = {
+            "x": self.display_surface.get_width(), "y": self.display_surface.get_height()}
+
+    def json_file(self, mod="x"):
+        self.map_data()
+        with open(f"mappeur_files/map_/{self.map_name}/data.json", mod) as f:
+            f.write(json.dumps(self.map_info, indent=4))
 
     def mouse_click(self, mouse, click_type, use_single=False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
@@ -226,6 +259,16 @@ class work_zone:
             self.zoom_tool(mouse)
         elif self.current_tool == "spawn_tool":
             self.spawn_tool(mouse)
+
+    def check_input(self):
+        self.keys = pygame.key.get_pressed()
+
+        if self.keys[pygame.K_LCTRL]:
+            self.shortcut_status = False
+            if self.keys[pygame.K_s]:
+                self.json_file("w")
+        else:
+            self.shortcut_status = True
 
     def update(self):
         self.mouse = pygame.mouse.get_pos()

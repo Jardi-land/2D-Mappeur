@@ -1,6 +1,5 @@
 import sys
 import pygame
-from typing import overload
 from settings import *
 
 
@@ -27,6 +26,8 @@ class button:
 
         self.shortcut = shortcut
 
+        self.shortcut_status = True
+
     def is_over(self, mouse):
         if mouse[0] > self.pos[0] and mouse[0] < (self.pos[0] + self.image.get_width()) and mouse[1] > self.pos[1] and mouse[1] < (self.pos[1] + self.image.get_height()):
             return True
@@ -45,7 +46,7 @@ class button:
                     else:
                         return None
                 else:
-                    if (pygame.mouse.get_pressed()[0] and self.is_over(mouse)) or self.keys[self.shortcut]:
+                    if (pygame.mouse.get_pressed()[0] and self.is_over(mouse)) or (self.keys[self.shortcut] if self.shortcut_status else False):
                         return self.action
                     else:
                         return None
@@ -86,6 +87,8 @@ class out_worker:
 
         self.button_status = False
 
+        self.shortcut_status = True
+
         self.button_list = []
 
         # All button
@@ -110,6 +113,7 @@ class out_worker:
         self.keys = pygame.key.get_pressed()
 
         for i in self.button_list:
+            i.shortcut_status = self.shortcut_status
             if i.type == "tool":
                 if not i.get_action(self.mouse, self.current_tool, self.button_status) == None:
                     self.current_tool = i.get_action(
@@ -123,4 +127,5 @@ class out_worker:
                 if self.current_tool in i.appear_event:
                     i.update(self.mouse, self.current_tool, self.button_status)
                 else:
-                    i.update(self.mouse, self.current_tool, self.button_status, 0.5)
+                    i.update(self.mouse, self.current_tool,
+                             self.button_status, 0.5)
