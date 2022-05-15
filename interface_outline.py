@@ -91,8 +91,6 @@ class outline_interface:
             self.nothing_color_secondary, (screen_res[0] - self.wk_zone_res[0] - 24, 0))
 
     def worker_info_sharing(self):
-        self.current_tool = self.out_worker_class.current_tool
-        self.single_action = self.out_worker_class.single_action
         self.out_worker_class.single_action = None
 
     def update(self):
