@@ -2,6 +2,7 @@ from git import Repo
 import os
 import pygame
 from settings import *
+from support import *
 import json
 
 
@@ -32,7 +33,7 @@ class spawn_point:
 
 
 class work_zone:
-    def __init__(self, surface) -> None:
+    def __init__(self, surface: pygame.Surface) -> None:
         self.display_surface = surface
 
         self.wk_zone_res = screen_res_array[screen_res_numb + 1]
@@ -78,6 +79,18 @@ class work_zone:
 
         self.wk_status = False
 
+        self.can_save = True
+
+        self.save_image = import_folder(
+            "mappeur_files/internal/save_animation", "")
+
+        self.save_image_numb = 0
+
+        self.save_image_speed = 0.15
+
+        self.save_animation_length = len(
+            self.save_image) / self.save_image_speed
+
         self.map_name = None
 
         self.repo = Repo(os.path.dirname(__file__))
@@ -107,6 +120,9 @@ class work_zone:
         self.map_data()
         with open(f"mappeur_files/map_/{self.map_name}/data.json", mod) as f:
             f.write(json.dumps(self.map_info, indent=4))
+        self.can_save = False
+        self.save_animation_length = len(
+            self.save_image) / self.save_image_speed
 
     def mouse_click(self, mouse, click_type, use_single=False):
         if mouse[0] > screen_res[0] - self.size_og[0] and mouse[1] > screen_res[1] - self.size_og[1]:
@@ -265,10 +281,21 @@ class work_zone:
 
         if self.keys[pygame.K_LCTRL]:
             self.shortcut_status = False
-            if self.keys[pygame.K_s]:
-                self.json_file("w")
+            if self.can_save:
+                if self.keys[pygame.K_s]:
+                    self.json_file("w")
+
         else:
             self.shortcut_status = True
+
+    def save_animation(self):
+        self.display_surface.blit(
+            self.save_image[int(self.save_image_numb)], (screen_res[0] - 8 - self.save_image[0].get_width() + 4, screen_res[1] - 8 - self.save_image[1].get_height()))
+        self.save_image_numb += self.save_image_speed
+
+        if int(self.save_image_numb) == len(self.save_image):
+            self.save_image_numb = 0
+            self.can_save = True
 
     def update(self):
         self.mouse = pygame.mouse.get_pos()
@@ -276,8 +303,14 @@ class work_zone:
         if not self.wk_status:
             pass
         else:
+
             self.check_input()
 
             self.current_action(self.mouse)
 
             self.draw()
+
+            if self.save_animation_length > 0:
+                self.save_animation()
+                self.save_animation_length -= 1
+
