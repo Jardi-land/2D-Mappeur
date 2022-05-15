@@ -48,8 +48,8 @@ class Interface:
                 return self.map_numb
 
     def send_info(self):
-        self.wk_class.current_tool = self.outline_interface_class.current_tool
-        self.wk_class.single_action = self.outline_interface_class.single_action
+        self.wk_class.current_tool = self.outline_interface_class.out_worker_class.current_tool
+        self.wk_class.single_action = self.outline_interface_class.out_worker_class.single_action
         self.outline_interface_class.out_worker_class.shortcut_status = self.wk_class.shortcut_status
 
     def action(self):
