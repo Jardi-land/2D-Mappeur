@@ -115,6 +115,7 @@ class work_zone:
         self.map_info["2D-mappeur"]["Map-info"]["name"] = self.map_name
         self.map_info["2D-mappeur"]["Map-info"]["base_scale"] = {
             "x": self.display_surface.get_width(), "y": self.display_surface.get_height()}
+        self.map_info["2D-mappeur"]["Map-info"]["spawn_point"] = {"x": self.spawn_point.pos_og[0], "y": self.spawn_point.pos_og[1]}
 
     def json_file(self, mod="x"):
         self.map_data()
