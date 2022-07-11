@@ -34,7 +34,7 @@ class menu:
         self.repo = Repo(os.path.dirname(__file__))
 
         self.commits = self.repo.iter_commits(
-            "master", max_count=100, since='30.days.ago')
+            "master", max_count=100)
 
         self.commit_dict = {}
 
@@ -69,7 +69,7 @@ class menu:
 
     def news(self):
         for text in self.news_text:
-            text.draw()
+            text.draw(self.display_surface)
 
     def update(self):
         self.keys = pygame.key.get_pressed()
@@ -82,7 +82,7 @@ class menu:
             if self.button_nv.update() is not None:
                 self.status = self.button_nv.action
         elif self.status == "nv_projet":
-            self.attention_text.draw()
+            self.attention_text.draw(self.display_surface)
             if self.button_confirme.update() is not None:
                 return "confirme"
             elif self.button_quit.update() is not None:
