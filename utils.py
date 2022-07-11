@@ -120,11 +120,11 @@ class text:
     def get_width(self):
         return max(self.line_width.values())
 
-    def draw(self):
+    def draw(self, surface : pygame.Surface):
         for line_nb, line in enumerate(self.text):
             self.pos_x = self.pos[0]
             for cara in line:
-                self.display_surface.blit(pygame.transform.scale(self.text_image[cara], (self.text_image[cara].get_width(
+                surface.blit(pygame.transform.scale(self.text_image[cara], (self.text_image[cara].get_width(
                 ) * self.size, self.text_image[cara].get_height() * self.size)), (self.pos_x, self.pos[1] + (8 * self.size * line_nb)))
                 self.pos_x += self.text_image[cara].get_width() * self.size
 
@@ -229,7 +229,7 @@ class button:
 
     def update(self):
         self.constructor()
-        self.my_text.draw()
+        self.my_text.draw(self.display_surface)
 
         if not self.active:
             self.unactive_time -= 1
