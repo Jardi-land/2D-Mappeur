@@ -4,7 +4,7 @@ from settings import *
 
 
 class button:
-    def __init__(self, surface, type, action, img_path, img_selec_path, x, y, transx, transy, shortcut, appear_event=None) -> None:
+    def __init__(self, surface, type, action, img_path, img_selec_path, x, y, transx, transy, shortcut, appear_event=[False]) -> None:
         self.display_surface = surface
 
         self.type = type
@@ -108,6 +108,10 @@ class out_worker:
                                     self.first_button_pos[0], self.first_button_pos[1] - (self.button_size[0] - 2), self.button_size[0], self.button_size[1], None, ["hand_tool", "zoom_tool", "spawn_tool"])
         self.button_list.append(self.center_button)
 
+        self.new_group = button(self.display_surface, "single_action", "new_group", "mappeur_files/internal/out_worker/button/new_group_button/unselected.png",
+                                "mappeur_files/internal/out_worker/button/new_group_button/selected.png", screen_res[0] - self.wk_zone_res[0] - 8, self.first_button_pos[1], self.button_size[0], self.button_size[1], pygame.K_n, [False])
+        self.button_list.append(self.new_group)
+
     def update(self):
         self.mouse = pygame.mouse.get_pos()
         self.keys = pygame.key.get_pressed()
@@ -124,7 +128,7 @@ class out_worker:
                 if not i.get_action(self.mouse, self.current_tool, self.button_status) == None:
                     self.single_action = i.get_action(
                         self.mouse, self.current_tool, self.button_status)
-                if self.current_tool in i.appear_event:
+                if self.current_tool in i.appear_event or False in i.appear_event:
                     i.update(self.mouse, self.current_tool, self.button_status)
                 else:
                     i.update(self.mouse, self.current_tool,
